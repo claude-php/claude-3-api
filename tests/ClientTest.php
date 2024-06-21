@@ -1,6 +1,6 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Tests;
+namespace Claude\Claude3Api\Tests;
 
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Client as HttpClient;
@@ -8,14 +8,14 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
-use Dalehurley\Claude3Api\Client;
-use Dalehurley\Claude3Api\Config;
-use Dalehurley\Claude3Api\Models\Content\ImageContent;
-use Dalehurley\Claude3Api\Models\Message;
-use Dalehurley\Claude3Api\Models\Content\TextContent;
-use Dalehurley\Claude3Api\Models\Tool;
-use Dalehurley\Claude3Api\Requests\MessageRequest;
-use Dalehurley\Claude3Api\Responses\MessageResponse;
+use Claude\Claude3Api\Client;
+use Claude\Claude3Api\Config;
+use Claude\Claude3Api\Models\Content\ImageContent;
+use Claude\Claude3Api\Models\Message;
+use Claude\Claude3Api\Models\Content\TextContent;
+use Claude\Claude3Api\Models\Tool;
+use Claude\Claude3Api\Requests\MessageRequest;
+use Claude\Claude3Api\Responses\MessageResponse;
 
 class ClientTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Models;
+namespace Claude\Claude3Api\Models;
 
 class Tool
 {

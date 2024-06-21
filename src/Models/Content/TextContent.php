@@ -1,6 +1,6 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Models\Content;
+namespace Claude\Claude3Api\Models\Content;
 
 class TextContent implements ContentInterface
 {

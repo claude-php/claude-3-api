@@ -1,6 +1,6 @@
 <?php
 
-namespace Dalehurley\Claude3Api;
+namespace Claude\Claude3Api;
 
 class Config
 {

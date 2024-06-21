@@ -17,7 +17,7 @@ A robust PHP package for interacting with Anthropic's Claude 3 API, supporting b
 You can install the package via composer:
 
 ```bash
-composer require dalehurley/claude-3-api
+composer require claude-3-api/claude-3-api
 ```
 
 ## Usage
@@ -33,8 +33,8 @@ For simple text-based interactions, you can use the `chat` method in several way
 1. Send a single string message:
 
 ```php
-use Dalehurley\Claude3Api\Client;
-use Dalehurley\Claude3Api\Config;
+use Claude\Claude3Api\Client;
+use Claude\Claude3Api\Config;
 
 // Create a configuration object with your API key
 $config = new Config('your-api-key-here');
@@ -88,9 +88,9 @@ The `chat` method is flexible and can handle various input formats, making it ea
 For more complex scenarios, you can still use the `sendMessage` method with a `MessageRequest` object:
 
 ```php
-use Dalehurley\Claude3Api\Models\Message;
-use Dalehurley\Claude3Api\Models\Content\TextContent;
-use Dalehurley\Claude3Api\Requests\MessageRequest;
+use Claude\Claude3Api\Models\Message;
+use Claude\Claude3Api\Models\Content\TextContent;
+use Claude\Claude3Api\Requests\MessageRequest;
 
 // Create a message request
 $messageRequest = new MessageRequest();
@@ -111,7 +111,7 @@ echo "Claude's response: " . $response->getContent()[0]['text'];
 ### Vision Capabilities
 
 ```php
-use Dalehurley\Claude3Api\Models\Content\ImageContent;
+use Claude\Claude3Api\Models\Content\ImageContent;
 
 // Send a message with both image and text
 $response = $client->sendMessageWithImage('path/to/image.jpg', 'What is in this image?');
@@ -134,7 +134,7 @@ $client->streamMessage($messageRequest, function ($chunk) {
 ### Using Tools
 
 ```php
-use Dalehurley\Claude3Api\Models\Tool;
+use Claude\Claude3Api\Models\Tool;
 
 $weatherTool = new Tool(
     'get_weather',

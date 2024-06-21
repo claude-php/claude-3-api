@@ -1,8 +1,8 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Models;
+namespace Claude\Claude3Api\Models;
 
-use Dalehurley\Claude3Api\Models\Content\ContentInterface;
+use Claude\Claude3Api\Models\Content\ContentInterface;
 
 class Message
 {

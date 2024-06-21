@@ -1,6 +1,6 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Responses;
+namespace Claude\Claude3Api\Responses;
 
 class MessageResponse
 {

@@ -1,5 +1,5 @@
 {
-    "name": "dalehurley/claude-3-api",
+    "name": "claude-3-api/claude-3-api",
     "description": "A PHP package for the Claude 3.5 Sonnet API",
     "type": "library",
     "require": {
@@ -13,12 +13,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Dalehurley\\Claude3Api\\": "src/"
+            "Claude\\Claude3Api\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Dalehurley\\Claude3Api\\Tests\\": "tests/"
+            "Claude\\Claude3Api\\Tests\\": "tests/"
         }
     },
     "authors": [

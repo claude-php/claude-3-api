@@ -1,10 +1,10 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Requests;
+namespace Claude\Claude3Api\Requests;
 
-use Dalehurley\Claude3Api\Models\Message;
-use Dalehurley\Claude3Api\Models\Tool;
-use Dalehurley\Claude3Api\Exceptions\InvalidArgumentException;
+use Claude\Claude3Api\Models\Message;
+use Claude\Claude3Api\Models\Tool;
+use Claude\Claude3Api\Exceptions\InvalidArgumentException;
 
 class MessageRequest
 {

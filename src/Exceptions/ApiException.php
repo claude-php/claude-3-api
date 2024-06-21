@@ -1,6 +1,6 @@
 <?php
 
-namespace Dalehurley\Claude3Api\Exceptions;
+namespace Claude\Claude3Api\Exceptions;
 
 class ApiException extends \Exception
 {

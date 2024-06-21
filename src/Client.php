@@ -1,15 +1,15 @@
 <?php
 
-namespace Dalehurley\Claude3Api;
+namespace Claude\Claude3Api;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\RequestException;
-use Dalehurley\Claude3Api\Exceptions\ApiException;
-use Dalehurley\Claude3Api\Models\Content\ImageContent;
-use Dalehurley\Claude3Api\Models\Content\TextContent;
-use Dalehurley\Claude3Api\Models\Message;
-use Dalehurley\Claude3Api\Requests\MessageRequest;
-use Dalehurley\Claude3Api\Responses\MessageResponse;
+use Claude\Claude3Api\Exceptions\ApiException;
+use Claude\Claude3Api\Models\Content\ImageContent;
+use Claude\Claude3Api\Models\Content\TextContent;
+use Claude\Claude3Api\Models\Message;
+use Claude\Claude3Api\Requests\MessageRequest;
+use Claude\Claude3Api\Responses\MessageResponse;
 
 class Client
 {
