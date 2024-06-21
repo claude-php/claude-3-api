@@ -1,5 +1,5 @@
 {
-    "name": "claude-3-api/claude-3-api",
+    "name": "claude-php/claude-3-api",
     "description": "A PHP package for the Claude 3.5 Sonnet API",
     "type": "library",
     "require": {

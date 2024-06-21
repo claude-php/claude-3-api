@@ -17,7 +17,7 @@ A robust PHP package for interacting with Anthropic's Claude 3 API, supporting b
 You can install the package via composer:
 
 ```bash
-composer require claude-3-api/claude-3-api
+composer require claude-php/claude-3-api
 ```
 
 ## Usage
