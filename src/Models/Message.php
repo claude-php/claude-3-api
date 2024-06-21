@@ -30,4 +30,14 @@ class Message
             }, $this->content),
         ];
     }
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function getContent(): array
+    {
+        return $this->content;
+    }
 }

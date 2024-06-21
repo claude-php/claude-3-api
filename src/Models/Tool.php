@@ -23,4 +23,19 @@ class Tool
             'input_schema' => $this->inputSchema,
         ];
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getInputSchema(): array
+    {
+        return $this->inputSchema;
+    }
 }
