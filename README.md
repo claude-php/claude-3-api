@@ -157,6 +157,32 @@ $weatherTool = new Tool(
 );
 
 $messageRequest->addTool($weatherTool);
+
+// Create a message request and add the tool
+$messageRequest = new MessageRequest();
+$messageRequest->addTool($weatherTool);
+
+// Add a user message that might trigger tool use
+$userMessage = new Message('user', [
+    new TextContent('What\'s the weather like in New York?')
+]);
+$messageRequest->addMessage($userMessage);
+
+// Send the message
+$response = $client->sendMessage($messageRequest);
+
+// The response might include tool use
+foreach ($response->getContent() as $content) {
+    if ($content['type'] === 'text') {
+        echo "Claude's response: " . $content['text'] . "\n";
+    } elseif ($content['type'] === 'tool_use') {
+        echo "Tool used: " . $content['name'] . "\n";
+        echo "Tool input: " . json_encode($content['input']) . "\n";
+        
+        // Here you would typically execute the actual tool
+        // and send the result back to Claude in a new message
+    }
+}
 ```
 
 ## Testing
