@@ -43,6 +43,9 @@ class Client
             if (isset($request['temperature'])) {
                 $messageRequest->setTemperature($request['temperature']);
             }
+            if (isset($request['system'])) {
+                $messageRequest->setSystem($request['system']);
+            }
             foreach ($request['messages'] as $message) {
                 $messageRequest->addMessage(new Message($message['role'], [new TextContent($message['content'])]));
             }
