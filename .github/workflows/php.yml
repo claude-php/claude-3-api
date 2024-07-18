@@ -1,27 +1,21 @@
-name: PHP Composer
+name: Create Tag
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+    branches:
+      - main  # or your default branch name
 
 jobs:
-  build:
-
+  create-tag:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
-    - name: GitHub Tag (with tags filter)
-    # You may pin to the exact commit or the version.
-      uses: IIlyichev/github-tag-action@v6.3
-      with:
-        # Required for permission to tag the repo.
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: GitHub Tag (with tags filter)
+        uses: IIlyichev/github-tag-action@v6.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           
     
