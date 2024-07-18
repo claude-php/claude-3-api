@@ -26,7 +26,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-          WITH_V: true
+          WITH_V: false
 
       - name: Update Composer version
         run: |
