@@ -40,9 +40,8 @@ jobs:
 
     - name: GitHub Tag (with tags filter)
     # You may pin to the exact commit or the version.
-    # uses: IIlyichev/github-tag-action@8b40ce208f6d7f902a3ee8c761f76db20fd87475
       uses: IIlyichev/github-tag-action@v6.3
-        with:
+      with:
         # Required for permission to tag the repo.
         github_token: ${{ secrets.GITHUB_TOKEN }}
           
