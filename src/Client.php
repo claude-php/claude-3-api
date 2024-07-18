@@ -37,6 +37,15 @@ class Client
             if (isset($request['model'])) {
                 $messageRequest->setModel($request['model']);
             }
+            if (isset($request['maxTokens'])) {
+                $messageRequest->setMaxTokens($request['maxTokens']);
+            }
+            if (isset($request['temperature'])) {
+                $messageRequest->setTemperature($request['temperature']);
+            }
+            if (isset($request['system'])) {
+                $messageRequest->setSystem($request['system']);
+            }
             foreach ($request['messages'] as $message) {
                 $messageRequest->addMessage(new Message($message['role'], [new TextContent($message['content'])]));
             }
