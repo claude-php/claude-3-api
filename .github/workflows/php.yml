@@ -1,4 +1,4 @@
-name: Auto Tag Release
+name: Auto Tag Release and Update Composer
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write  # This gives the GITHUB_TOKEN write access to repository contents
 
 jobs:
-  create-tag:
+  create-tag-and-update-composer:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,7 +27,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           WITH_V: true
-      
+
+      - name: Update Composer version
+        run: |
+          NEW_VERSION="${{ steps.tag_version.outputs.new_tag }}"
+          NEW_VERSION="${NEW_VERSION#v}"  # Remove 'v' prefix if present
+          sed -i 's/"version": ".*"/"version": "'"${NEW_VERSION}"'"/' composer.json
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add composer.json
+          git commit -m "Update Composer version to ${NEW_VERSION}"
+          git push
+
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -37,6 +48,7 @@ jobs:
           release_name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: |
             Changes in this Release
+            - Updated Composer version to ${{ steps.tag_version.outputs.new_tag }}
             - Added management of maxTokens and temperature parameters
             - Other changes...
           draft: false
