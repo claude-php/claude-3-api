@@ -1,6 +1,6 @@
 {
     "name": "claude-php/claude-3-api",
-    "version": "",
+    "version": "0.1.9",
     "description": "A PHP package for the Claude 3.5 Sonnet API",
     "type": "library",
     "require": {
