@@ -16,18 +16,29 @@ jobs:
         with:
           fetch-depth: 0  # Fetch all history for all tags and branches
       
-      - name: Bump version and push tag
-        id: tag_version
-        uses: anothrNick/github-tag-action@1.67.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
-          WITH_V: true
-          DRY_RUN: true
+      - name: Get current version
+        id: current_version
+        run: |
+          CURRENT_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.8")
+          CURRENT_VERSION=${CURRENT_VERSION#v}
+          echo "Current version: $CURRENT_VERSION"
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          IFS='.' read -ra VERSION_PARTS <<< "${{ steps.current_version.outputs.current_version }}"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=$((VERSION_PARTS[2] + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "New version: $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Update Composer version
         run: |
-          NEW_VERSION="${{ steps.tag_version.outputs.new_version }}"
+          NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
+          echo "Updating to version: $NEW_VERSION"
           sed -i 's/"version": ".*"/"version": "'"${NEW_VERSION}"'"/' composer.json
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -41,11 +52,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.tag_version.outputs.new_version }}
-          release_name: Release v${{ steps.tag_version.outputs.new_version }}
+          tag_name: v${{ steps.bump_version.outputs.new_version }}
+          release_name: Release v${{ steps.bump_version.outputs.new_version }}
           body: |
             Changes in this Release
-            - Updated Composer version to ${{ steps.tag_version.outputs.new_version }}
+            - Updated Composer version to ${{ steps.bump_version.outputs.new_version }}
             - Other changes...
           draft: false
           prerelease: false
