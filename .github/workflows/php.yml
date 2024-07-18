@@ -16,40 +16,36 @@ jobs:
         with:
           fetch-depth: 0  # Fetch all history for all tags and branches
       
-      - name: Get latest tag
-        id: get_latest_tag
-        run: echo "LATEST_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-      
       - name: Bump version and push tag
         id: tag_version
         uses: anothrNick/github-tag-action@1.67.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-          WITH_V: false
+          WITH_V: true
+          DRY_RUN: true
 
       - name: Update Composer version
         run: |
-          NEW_VERSION="${{ steps.tag_version.outputs.new_tag }}"
-          NEW_VERSION="${NEW_VERSION#v}"  # Remove 'v' prefix if present
+          NEW_VERSION="${{ steps.tag_version.outputs.new_version }}"
           sed -i 's/"version": ".*"/"version": "'"${NEW_VERSION}"'"/' composer.json
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add composer.json
-          git commit -m "Update Composer version to ${NEW_VERSION}"
-          git push
+          git commit -m "Bump version to ${NEW_VERSION}"
+          git tag -a "v${NEW_VERSION}" -m "Version ${NEW_VERSION}"
+          git push && git push --tags
 
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag_name: v${{ steps.tag_version.outputs.new_version }}
+          release_name: Release v${{ steps.tag_version.outputs.new_version }}
           body: |
             Changes in this Release
-            - Updated Composer version to ${{ steps.tag_version.outputs.new_tag }}
-            - Added management of maxTokens and temperature parameters
+            - Updated Composer version to ${{ steps.tag_version.outputs.new_version }}
             - Other changes...
           draft: false
           prerelease: false
