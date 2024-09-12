@@ -68,11 +68,12 @@ $response = $client->chat([
 echo "Claude's response: " . $response->getContent()[0]['text'];
 ```
 
-4. Specify a model (optional):
+4. Specify a model or max tokens (optional):
 
 ```php
 $response = $client->chat([
     'model' => 'claude-3-opus-20240229',
+    'maxTokens' => 1024,
     'messages' => [
         ['role' => 'user', "content" => "Hello, Claude"],
     ]
