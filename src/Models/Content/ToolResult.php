@@ -8,13 +8,10 @@ class ToolResult implements ContentInterface
 {
     private string $toolUseId;
     private $content;
-    private bool $isError;
-
-    public function __construct(string $toolUseId, $content, bool $isError = false)
+    public function __construct(string $toolUseId, $content)
     {
         $this->toolUseId = $toolUseId;
         $this->content = $content;
-        $this->isError = $isError;
     }
 
     public function toArray(): array
@@ -24,10 +21,6 @@ class ToolResult implements ContentInterface
             'tool_use_id' => $this->toolUseId,
             'content' => $this->content
         ];
-
-        if ($this->isError) {
-            $result['is_error'] = true;
-        }
 
         return $result;
     }
