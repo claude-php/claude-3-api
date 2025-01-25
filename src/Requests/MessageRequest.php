@@ -48,7 +48,7 @@ class MessageRequest
         return $this;
     }
 
-    public function addTool(Tool $tool): self
+    public function addTool(Tool|array $tool): self
     {
         $this->tools[] = $tool->toArray();
         return $this;
