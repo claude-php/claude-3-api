@@ -4,11 +4,11 @@ A robust PHP package for interacting with Anthropic's Claude 3 API, supporting b
 
 ## Features
 
-- Easy-to-use interface for sending messages to Claude 3
+- Easy-to-use interface for sending messages to Claude (default), OpenAI and DeepSeek
 - Support for text-based conversations with a simple chat method
-- Vision capabilities - send images along with text prompts
 - Streaming support for real-time responses
-- Tool usage support
+- Vision capabilities - send images along with text prompts (Claude only)
+- Tool usage support (Claude only)
 - Comprehensive error handling
 - Fully tested with PHPUnit
 
@@ -84,6 +84,90 @@ echo "Claude's response: " . $response->getContent()[0]['text'];
 
 The `chat` method is flexible and can handle various input formats, making it easy to interact with Claude in different scenarios.
 
+### Streaming
+
+#### Stream with text message
+
+```php
+$client->streamMessage('Hello, how are you?', function ($chunk) {
+    echo $chunk;
+});
+```
+
+#### Stream with Array
+
+```php
+$client->streamMessage([
+    ['role' => 'user', "content" => "Hello, Claude"],
+    ['role' => 'assistant', "content" => "Hello! It's nice to meet you. How can I assist you today?"],
+    ['role' => 'user', "content" => "What is the population of Sydney?"],
+], function ($chunk) {
+    echo $chunk;
+});
+```
+
+### OpenAI
+
+There is only limited support for OpenAI API for Chat Completion and Streaming.
+
+```php
+use Claude\Claude3Api\Config;
+use Claude\Claude3Api\Client;
+
+$apiKey = 'sk-#############################';  // OpenAI API Key
+
+$config = new Config($apiKey);
+$config->useOpenAI();
+$client = new Client($config);
+
+$response = $client->chat("Hello, OpenAI");
+
+echo "OpenAI's response: " . $response->getChoices()[0]['message']['content'];
+```
+
+### DeepSeek
+
+There is only limited support for DeepSeek API for Chat Completion and Streaming.
+
+```php
+use Claude\Claude3Api\Config;
+use Claude\Claude3Api\Client;
+
+$apiKey = 'sk-#############################';  // DeepSeek API Key
+
+$config = new Config($apiKey);
+$config->useDeepSeek();
+$client = new Client($config);
+
+$response = $client->chat("Hello, DeepSeek");
+
+echo "DeepSeek's response: " . $response->getChoices()[0]['message']['content'];
+```
+
+### Other Compatible Providers
+
+There is the flexibility to use other providers, but the API is not fully supported.
+
+```php
+use Claude\Claude3Api\Config;
+use Claude\Claude3Api\Client;
+
+$apiKey = 'sk-#############################';  // Other API Key
+$baseUrl = 'https://api.deepseek.com';
+$apiVersion = '2023-06-01';
+$model = 'deepseek-chat';
+$authType = Config::AUTH_TYPE_BEARER; // or Config::AUTH_TYPE_API_KEY
+$messagePath = '/chat/completions';
+$maxTokens = 8192;
+
+$config = new Config($apiKey, $apiVersion, $baseUrl, $model, $maxTokens, $authType, $messagePath);
+$client = new Client($config);
+
+$response = $client->chat("Hello, Other Provider");
+
+echo "Other Provider's response: " . $response->getChoices()[0]['message']['content'];
+```
+
 ### Advanced Usage
 
 For more complex scenarios, you can still use the `sendMessage` method with a `MessageRequest` object:
@@ -120,7 +204,7 @@ $response = $client->sendMessageWithImage('path/to/image.jpg', 'What is in this 
 echo "Claude's description: " . $response->getContent()[0]['text'];
 ```
 
-### Streaming
+#### Stream with MessageRequest
 
 ```php
 $client->streamMessage($messageRequest, function ($chunk) {
@@ -179,7 +263,7 @@ foreach ($response->getContent() as $content) {
     } elseif ($content['type'] === 'tool_use') {
         echo "Tool used: " . $content['name'] . "\n";
         echo "Tool input: " . json_encode($content['input']) . "\n";
-        
+
         // Here you would typically execute the actual tool
         // and send the result back to Claude in a new message
     }

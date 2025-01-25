@@ -17,18 +17,26 @@ class Client
 
     public function __construct(private Config $config)
     {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'anthropic-version' => $this->config->getApiVersion(),
+        ];
+
+        if ($this->config->getAuthType() === 'x-api-key') {
+            $headers['x-api-key'] = $this->config->getApiKey();
+        } elseif ($this->config->getAuthType() === 'bearer') {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getApiKey();
+        }
+
         $this->httpClient = new HttpClient([
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'x-api-key' => $this->config->getApiKey(),
-                'anthropic-version' => $this->config->getApiVersion(),
-            ],
+            'headers' => $headers,
         ]);
     }
 
-    public function chat(array|string $request): MessageResponse
+    private function formatRequest(array|string $request): MessageRequest
     {
-        $messageRequest = new MessageRequest();
+        $messageRequest = new MessageRequest($this->config);
+        $messageRequest->setModel($this->config->getModel());
 
         if (is_string($request)) {
             $messageRequest->addMessage(new Message('user', [new TextContent($request)]));
@@ -56,31 +64,41 @@ class Client
                 $messageRequest->addMessage(new Message($message['role'], [new TextContent($message['content'])]));
             }
         }
+        return $messageRequest;
+    }
 
+    public function chat(array|string $request): MessageResponse
+    {
+        $messageRequest = $this->formatRequest($request);
         return $this->sendMessage($messageRequest);
     }
 
     public function sendMessage(MessageRequest|array $request): MessageResponse
     {
         try {
-            $url = rtrim($this->config->getBaseUrl(), '/') . '/messages';
+            $url = rtrim($this->config->getBaseUrl(), '/') . $this->config->getMessagePath();
             $response = $this->httpClient->post($url, [
                 'json' => $request->toArray(),
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);
+
             return new MessageResponse($data);
         } catch (RequestException $e) {
             throw new ApiException('Error sending message: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function streamMessage(MessageRequest $request, callable $callback)
+    public function streamMessage($request, callable $callback)
     {
+        if (!$request instanceof MessageRequest) {
+            $request = $this->formatRequest($request);
+        }
+
         $request->setStream(true);
 
         try {
-            $url = rtrim($this->config->getBaseUrl(), '/') . '/messages';
+            $url = rtrim($this->config->getBaseUrl(), '/') . $this->config->getMessagePath();
             $response = $this->httpClient->post($url, [
                 'json' => $request->toArray(),
                 'stream' => true,
@@ -110,9 +128,17 @@ class Client
                                 $callback($data); // Pass the raw data if 'message' is not present
                             }
                             return;
+                        case 'message_other':
+                            if (isset($data)) {
+                                $callback($data);
+                            }
+                            break;
                         case 'content_block_start':
                         case 'content_block_delta':
                         case 'message_delta':
+                            $callback($data);
+                            break;
+                        default:
                             $callback($data);
                             break;
                     }
@@ -162,6 +188,14 @@ class Client
             }
 
             if (!empty($event['event']) && !empty($event['data'])) {
+                $events[] = $event;
+            } elseif (strpos($part, 'data:') === 0) {
+                $event['data'] = trim(substr($part, 5));
+                if (empty($event['event']) && $event['data'] !== '[DONE]') {
+                    $event['event'] = 'message_other';
+                } elseif (empty($event['event']) && $event['data'] === '[DONE]') {
+                    $event['event'] = 'message_stop';
+                }
                 $events[] = $event;
             }
         }

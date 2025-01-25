@@ -2,14 +2,15 @@
 
 namespace Claude\Claude3Api\Requests;
 
+use Claude\Claude3Api\Config;
 use Claude\Claude3Api\Models\Message;
 use Claude\Claude3Api\Models\Tool;
 use Claude\Claude3Api\Exceptions\InvalidArgumentException;
 
 class MessageRequest
 {
-    private string $model = 'claude-3-5-sonnet-latest';
-    private int $maxTokens = 8192;
+    private string $model = Config::DEFAULT_MODEL;
+    private int $maxTokens = Config::DEFAULT_MAX_TOKENS;
     private array $messages = [];
     private array $tools = [];
     private ?array $toolChoice = null;
@@ -20,6 +21,14 @@ class MessageRequest
     private ?array $metadata = null;
     private ?int $topK = null;
     private ?float $topP = null;
+
+    public function __construct(Config $config = null)
+    {
+        if ($config) {
+            $this->model = $config->getModel() ?? Config::DEFAULT_MODEL;
+            $this->maxTokens = $config->getMaxTokens() ?? Config::DEFAULT_MAX_TOKENS;
+        }
+    }
 
     public function setModel(string $model): self
     {
