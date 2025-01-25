@@ -40,7 +40,7 @@ jobs:
           echo "New version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Update Composer version
+      - name: Update Composer version and lock file
         run: |
           NEW_VERSION="${{ steps.bump_version.outputs.new_version }}"
           if [[ ! $NEW_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -49,9 +49,10 @@ jobs:
           fi
           echo "Updating to version: $NEW_VERSION"
           sed -i 's/"version": ".*"/"version": "'"${NEW_VERSION}"'"/' composer.json
+          composer update --lock
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add composer.json
+          git add composer.json composer.lock
           git commit -m "Bump version to ${NEW_VERSION}"
           git tag -a "v${NEW_VERSION}" -m "Version ${NEW_VERSION}"
           git push && git push --tags
