@@ -78,7 +78,7 @@ class Client
         try {
             $url = rtrim($this->config->getBaseUrl(), '/') . $this->config->getMessagePath();
             $response = $this->httpClient->post($url, [
-                'json' => $request->toArray(),
+                'json' => is_array($request) ? $request : $request->toArray(),
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);
