@@ -50,7 +50,11 @@ class MessageRequest
 
     public function addTool(Tool|array $tool): self
     {
-        $this->tools[] = $tool->toArray();
+        if (is_array($tool)) {
+            $this->tools[] = $tool;
+        } else {
+            $this->tools[] = $tool->toArray();
+        }
         return $this;
     }
 
