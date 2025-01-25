@@ -8,8 +8,8 @@ use Claude\Claude3Api\Exceptions\InvalidArgumentException;
 
 class MessageRequest
 {
-    private string $model = 'claude-3-sonnet-20240229';
-    private int $maxTokens = 1024;
+    private string $model = 'claude-3-5-sonnet-latest';
+    private int $maxTokens = 8192;
     private array $messages = [];
     private array $tools = [];
     private ?array $toolChoice = null;
