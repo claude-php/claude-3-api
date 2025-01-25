@@ -25,4 +25,22 @@ class Config
     {
         return $this->baseUrl;
     }
+
+    public function setApiKey(string $apiKey): self
+    {
+        $this->apiKey = $apiKey;
+        return $this;
+    }
+
+    public function setApiVersion(string $apiVersion): self
+    {
+        $this->apiVersion = $apiVersion;
+        return $this;
+    }
+
+    public function setBaseUrl(string $baseUrl): self
+    {
+        $this->baseUrl = $baseUrl;
+        return $this;
+    }
 }
