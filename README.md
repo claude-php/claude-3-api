@@ -280,6 +280,23 @@ composer test
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Maintainer
+
+This package is maintained by [Dale Hurley](https://dalehurley.com).
+
+### Support Dale's Work
+
+You can support Dale by checking out his other solutions:
+
+- [Full.CX](https://full.cx) - Transform your product vision into actionable dev tasks with AI-powered clarity and precision
+- [Custom Homework Maker](https://customhomeworkmaker.com) - Create engaging, personalized homework assignments in seconds with advanced AI technology
+- [SpeedBrain](https://speedbrain.app) - Challenge yourself with this addictive, fast-paced knowledge game - completely free!
+- [Spotfillr](https://spotfillr.com) - The smart solution for childcare centers to maximize occupancy and revenue through automated casual spot management
+- [1-to-5 App](https://www.1to5app.com) - Help your children develop emotional intelligence with this engaging, research-backed emotional learning companion
+- [RapidReportCard](https://rapidreportcard.com) - Streamline performance reviews and unlock your team's full potential with AI-powered insights
+- [Risks.io](https://www.risks.io) - Stay ahead of project risks with our intelligent platform for seamless risk management and mitigation
+- [TimeLodge](https://timelodge.com) - Simplify your business with powerful time tracking, professional invoicing, and seamless payment processing
+
 ## License
 
 This Claude 3 API Package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
