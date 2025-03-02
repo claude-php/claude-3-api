@@ -9,6 +9,7 @@ A robust PHP package for interacting with Anthropic's Claude 3 API, supporting b
 - Streaming support for real-time responses
 - Vision capabilities - send images along with text prompts (Claude only)
 - Tool usage support (Claude only)
+- Prompt caching support for improved performance and cost efficiency (Claude only)
 - Comprehensive error handling
 - Fully tested with PHPUnit
 
@@ -270,6 +271,107 @@ foreach ($response->getContent() as $content) {
 }
 ```
 
+### Using Prompt Caching
+
+Prompt caching is a powerful feature that optimizes API usage by allowing resuming from specific prefixes in your prompts, reducing token costs and response times.
+
+```php
+use Claude\Claude3Api\Models\Message;
+use Claude\Claude3Api\Models\Content\TextContent;
+use Claude\Claude3Api\Models\Content\CacheControl;
+use Claude\Claude3Api\Requests\MessageRequest;
+
+// Create a message request
+$messageRequest = new MessageRequest();
+
+// Set system message with cacheable content
+$systemMessage = new Message('system', [
+    // Regular system instruction
+    new TextContent("You are an AI assistant tasked with analyzing literary works."),
+
+    // Large text to be cached (e.g., an entire book)
+    TextContent::withEphemeralCache("<the entire contents of Pride and Prejudice>")
+]);
+
+// Add the system message properly
+$messageRequest->addSystemMessage($systemMessage);
+
+// Add a user message
+$userMessage = new Message('user', [
+    new TextContent('Analyze the major themes in Pride and Prejudice.')
+]);
+$messageRequest->addMessage($userMessage);
+
+// Send the message
+$response = $client->sendMessage($messageRequest);
+
+// Check if the cache was created
+if ($response->createdCache()) {
+    echo "Created a new cache entry with " . $response->getCacheCreationInputTokens() . " tokens\n";
+}
+
+// Process the response
+echo "Claude's response: " . $response->getContent()[0]['text'] . "\n";
+
+// --- Send a second request using the same cached content ---
+
+// Create a new message request (the cache will be used automatically)
+$messageRequest2 = new MessageRequest();
+
+// Set the exact same system message with the same cache control
+$systemMessage2 = new Message('system', [
+    new TextContent("You are an AI assistant tasked with analyzing literary works."),
+    TextContent::withEphemeralCache("<the entire contents of Pride and Prejudice>")
+]);
+
+// Add the system message properly
+$messageRequest2->addSystemMessage($systemMessage2);
+
+// Add a different user message
+$userMessage2 = new Message('user', [
+    new TextContent('Who is the protagonist in Pride and Prejudice and what are their key characteristics?')
+]);
+$messageRequest2->addMessage($userMessage2);
+
+// Send the second message
+$response2 = $client->sendMessage($messageRequest2);
+
+// Check if the cache was used
+if ($response2->usedCache()) {
+    echo "Used cache for " . $response2->getCacheReadInputTokens() . " tokens\n";
+    echo "Only processed " . $response2->getInputTokens() . " new input tokens\n";
+}
+
+// Process the response
+echo "Claude's response: " . $response2->getContent()[0]['text'] . "\n";
+```
+
+#### Cache Control Methods
+
+The library provides helper methods to work with prompt caching:
+
+```php
+// Create text content with cache control
+$textWithCache = TextContent::withEphemeralCache("Large text to be cached");
+
+// Check cache stats in the response
+$response->getCacheCreationInputTokens(); // Tokens written to cache
+$response->getCacheReadInputTokens();     // Tokens read from cache
+$response->getInputTokens();              // Non-cached tokens
+$response->getOutputTokens();             // Output tokens
+$response->usedCache();                   // Whether the request used cache
+$response->createdCache();                // Whether the request created a cache
+```
+
+#### Prompt Caching Requirements
+
+- Supported models: Claude 3.7 Sonnet, Claude 3.5 Sonnet, Claude 3.5 Haiku, Claude 3 Haiku, Claude 3 Opus
+- Minimum cacheable prompt length:
+  - 1024 tokens for Claude 3.7 Sonnet, Claude 3.5 Sonnet, and Claude 3 Opus
+  - 2048 tokens for Claude 3.5 Haiku and Claude 3 Haiku
+- The cache has a minimum 5-minute lifetime
+- Currently only "ephemeral" cache type is supported
+
 ### Using Beta Features
 
 The package supports configurable beta features provided by Anthropic's API.
@@ -346,11 +448,23 @@ This package is not officially associated with Anthropic. Make sure to comply wi
 
 ## Recent Changes
 
-Version 0.1.21
+### Version 0.1.23
 
-Fixed type inconsistency in Config constructor to support strict types
-Added Composer test command - you can now run tests with composer test
-Added comprehensive test suite for new features and strict types compatibility
+- Added support for prompt caching
+- Added CacheControl model for managing cache settings
+- Updated TextContent to support cache_control parameter
+- Added cache-related helper methods to MessageResponse
+- Improved documentation with prompt caching examples and best practices
+
+### Version 0.1.22
+
+- Fixed the tests
+
+### Version 0.1.21
+
+- Fixed type inconsistency in Config constructor to support strict types
+- Added Composer test command - you can now run tests with `composer test`
+- Added comprehensive test suite for new features and strict types compatibility
 
 ### Version 0.1.20
 

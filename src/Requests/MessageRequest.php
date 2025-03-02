@@ -14,7 +14,7 @@ class MessageRequest
     private array $messages = [];
     private array $tools = [];
     private ?array $toolChoice = null;
-    private ?string $system = null;
+    private ?array $system = null;
     private ?float $temperature = null;
     private ?array $stopSequences = null;
     private ?bool $stream = null;
@@ -44,7 +44,32 @@ class MessageRequest
 
     public function addMessage(Message $message): self
     {
+        // Handle system messages separately
+        if ($message->getRole() === 'system') {
+            $this->addSystemMessage($message);
+            return $this;
+        }
+
         $this->messages[] = $message->toArray();
+        return $this;
+    }
+
+    public function addSystemMessage(Message $systemMessage): self
+    {
+        if ($systemMessage->getRole() !== 'system') {
+            throw new InvalidArgumentException('Only system role messages can be added as system messages');
+        }
+
+        // Initialize system array if not already set
+        if ($this->system === null) {
+            $this->system = [];
+        }
+
+        // Add each content item to the system array
+        foreach ($systemMessage->getContent() as $contentItem) {
+            $this->system[] = $contentItem->toArray();
+        }
+
         return $this;
     }
 
@@ -66,7 +91,17 @@ class MessageRequest
 
     public function setSystem(?string $system): self
     {
-        $this->system = $system;
+        if ($system !== null) {
+            $this->system = [
+                [
+                    'type' => 'text',
+                    'text' => $system
+                ]
+            ];
+        } else {
+            $this->system = null;
+        }
+
         return $this;
     }
 
@@ -118,16 +153,16 @@ class MessageRequest
             'messages' => $this->messages,
         ];
 
+        if (!empty($this->system)) {
+            $data['system'] = $this->system;
+        }
+
         if (!empty($this->tools)) {
             $data['tools'] = $this->tools;
         }
 
         if ($this->toolChoice !== null) {
             $data['tool_choice'] = $this->toolChoice;
-        }
-
-        if ($this->system !== null) {
-            $data['system'] = $this->system;
         }
 
         if ($this->temperature !== null) {

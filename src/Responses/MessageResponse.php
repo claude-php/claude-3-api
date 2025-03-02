@@ -92,4 +92,64 @@ class MessageResponse
     {
         return $this->systemFingerprint;
     }
+
+    /**
+     * Get the number of tokens that were written to the cache
+     * 
+     * @return int
+     */
+    public function getCacheCreationInputTokens(): int
+    {
+        return $this->usage['cache_creation_input_tokens'] ?? 0;
+    }
+
+    /**
+     * Get the number of tokens that were read from the cache
+     * 
+     * @return int
+     */
+    public function getCacheReadInputTokens(): int
+    {
+        return $this->usage['cache_read_input_tokens'] ?? 0;
+    }
+
+    /**
+     * Get the number of input tokens that were neither read from nor used to create a cache
+     * 
+     * @return int
+     */
+    public function getInputTokens(): int
+    {
+        return $this->usage['input_tokens'] ?? 0;
+    }
+
+    /**
+     * Get the number of output tokens in the response
+     * 
+     * @return int
+     */
+    public function getOutputTokens(): int
+    {
+        return $this->usage['output_tokens'] ?? 0;
+    }
+
+    /**
+     * Check if the request used cache
+     * 
+     * @return bool
+     */
+    public function usedCache(): bool
+    {
+        return ($this->getCacheReadInputTokens() > 0);
+    }
+
+    /**
+     * Check if the request created a new cache entry
+     * 
+     * @return bool
+     */
+    public function createdCache(): bool
+    {
+        return ($this->getCacheCreationInputTokens() > 0);
+    }
 }
