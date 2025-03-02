@@ -297,6 +297,10 @@ You can support Dale by checking out his other solutions:
 - [Risks.io](https://www.risks.io) - Stay ahead of project risks with our intelligent platform for seamless risk management and mitigation
 - [TimeLodge](https://timelodge.com) - Simplify your business with powerful time tracking, professional invoicing, and seamless payment processing
 
+## Changes
+
+2025-03-02 - Changed the default model to claude-3-7-sonnet-latest
+
 ## License
 
 This Claude 3 API Package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

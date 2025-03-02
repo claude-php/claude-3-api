@@ -10,7 +10,7 @@ class Config
     const CLAUDE_API_VERSION = '2023-06-01';
     const CLAUDE_BASE_URL = 'https://api.anthropic.com/v1';
     const CLAUDE_AUTH_TYPE = self::AUTH_TYPE_X_API_KEY;
-    const CLAUDE_MODEL = 'claude-3-5-sonnet-latest';
+    const CLAUDE_MODEL = 'claude-3-7-sonnet-latest';
     const CLAUDE_MAX_TOKENS = 8192;
     const CLAUDE_MESSAGE_PATH = '/messages';
 
