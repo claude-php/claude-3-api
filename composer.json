@@ -1,31 +1,34 @@
 {
-    "name": "claude-php/claude-3-api",
-    "version": "0.1.19",
-    "description": "A PHP package for the Claude 3.5 Sonnet API",
-    "type": "library",
-    "require": {
-        "php": "^8.0",
-        "guzzlehttp/guzzle": "^7.8",
-        "ext-json": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^11.2"
-    },
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Claude\\Claude3Api\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Claude\\Claude3Api\\Tests\\": "tests/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Dale Hurley",
-            "email": "dale@createmy.com.au"
-        }
-    ]
+  "name": "claude-php/claude-3-api",
+  "version": "0.1.19",
+  "description": "A PHP package for the Claude 3.7 Sonnet API",
+  "type": "library",
+  "require": {
+    "php": "^8.0",
+    "guzzlehttp/guzzle": "^7.8",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.2"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Claude\\Claude3Api\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Claude\\Claude3Api\\Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Dale Hurley",
+      "email": "dale@createmy.com.au"
+    }
+  ],
+  "scripts": {
+    "test": "vendor/bin/phpunit tests"
+  }
 }

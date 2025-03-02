@@ -346,6 +346,12 @@ This package is not officially associated with Anthropic. Make sure to comply wi
 
 ## Recent Changes
 
+Version 0.1.21
+
+Fixed type inconsistency in Config constructor to support strict types
+Added Composer test command - you can now run tests with composer test
+Added comprehensive test suite for new features and strict types compatibility
+
 ### Version 0.1.20
 
 - Updated default model to Claude 3.7 Sonnet (`claude-3-7-sonnet-latest`)

@@ -191,4 +191,44 @@ class ClientTest extends TestCase
         $this->assertNull($response->getStopSequence());
         $this->assertEquals(['input_tokens' => 100, 'output_tokens' => 80], $response->getUsage());
     }
+
+    public function testBetaFeaturesInHeader()
+    {
+        // Enable beta feature
+        $this->config->enable128kOutput();
+
+        // Create new client with updated config
+        $client = new Client($this->config);
+
+        // Use reflection to access private httpClient
+        $reflection = new \ReflectionClass($client);
+        $httpClientProperty = $reflection->getProperty('httpClient');
+        $httpClientProperty->setAccessible(true);
+        $httpClient = $httpClientProperty->getValue($client);
+
+        // Extract headers from the httpClient
+        $reflectionHttpClient = new \ReflectionClass($httpClient);
+        $configProperty = $reflectionHttpClient->getProperty('config');
+        $configProperty->setAccessible(true);
+        $clientConfig = $configProperty->getValue($httpClient);
+
+        $headers = $clientConfig['headers'];
+
+        // Check for beta feature header
+        $this->assertArrayHasKey('anthropic-beta', $headers);
+        $this->assertEquals('output-128k-2025-02-19', $headers['anthropic-beta']);
+    }
+
+    public function testEnable128kOutputWithTokens()
+    {
+        // Use custom token value
+        $customTokens = 100000;
+        $this->config->enable128kOutputWithTokens($customTokens);
+
+        // Verify beta feature is enabled
+        $this->assertTrue($this->config->isBetaFeatureEnabled('output-128k-2025-02-19'));
+
+        // Verify max tokens is set correctly
+        $this->assertEquals($customTokens, $this->config->getMaxTokens());
+    }
 }
