@@ -22,6 +22,18 @@ class Client
             'anthropic-version' => $this->config->getApiVersion(),
         ];
 
+        // Check for enabled beta features and add appropriate headers
+        $betaFeatures = [];
+
+        if ($this->config->isBetaFeatureEnabled('output-128k-2025-02-19')) {
+            $betaFeatures[] = 'output-128k-2025-02-19';
+        }
+
+        // Add beta headers if any features are enabled
+        if (!empty($betaFeatures)) {
+            $headers['anthropic-beta'] = implode(' ', $betaFeatures);
+        }
+
         if ($this->config->getAuthType() === 'x-api-key') {
             $headers['x-api-key'] = $this->config->getApiKey();
         } elseif ($this->config->getAuthType() === 'bearer') {

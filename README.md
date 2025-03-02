@@ -270,6 +270,40 @@ foreach ($response->getContent() as $content) {
 }
 ```
 
+### Using Beta Features
+
+The package supports configurable beta features provided by Anthropic's API.
+
+#### 128k Token Output for Claude 3.7 Sonnet
+
+Claude 3.7 Sonnet supports an extended output token limit of up to 128k tokens. Here's how to enable it:
+
+```php
+use Claude\Claude3Api\Config;
+use Claude\Claude3Api\Client;
+
+// Method 1: Enable 128k token output with default token setting (131072)
+$config = new Config('your-api-key');
+$config->enable128kOutputWithTokens();
+$client = new Client($config);
+
+// Method 2: Enable 128k token output with custom token limit
+$config = new Config('your-api-key');
+$config->enable128kOutputWithTokens(100000); // Set to 100k tokens
+$client = new Client($config);
+
+// Method 3: Manual configuration
+$config = new Config('your-api-key');
+$config->enableBetaFeature('output-128k-2025-02-19');
+$config->setMaxTokens(131072);
+$client = new Client($config);
+
+// Use the client with extended output capacity
+$response = $client->chat("Generate a comprehensive report on...");
+```
+
+This feature is particularly useful for generating or processing large amounts of content in a single API call.
+
 ## Testing
 
 ```bash
@@ -296,10 +330,7 @@ You can support Dale by checking out his other solutions:
 - [RapidReportCard](https://rapidreportcard.com) - Streamline performance reviews and unlock your team's full potential with AI-powered insights
 - [Risks.io](https://www.risks.io) - Stay ahead of project risks with our intelligent platform for seamless risk management and mitigation
 - [TimeLodge](https://timelodge.com) - Simplify your business with powerful time tracking, professional invoicing, and seamless payment processing
-
-## Changes
-
-2025-03-02 - Changed the default model to claude-3-7-sonnet-latest
+- [ToolNames](https://toolnames.com) - Tools and calculators for everything.
 
 ## License
 
@@ -312,3 +343,20 @@ If you encounter any problems or have any questions, please open an issue in the
 ## Disclaimer
 
 This package is not officially associated with Anthropic. Make sure to comply with Anthropic's terms of service when using this package.
+
+## Recent Changes
+
+### Version 0.1.20
+
+- Updated default model to Claude 3.7 Sonnet (`claude-3-7-sonnet-latest`)
+- Added support for configurable beta features
+- Added support for 128k token output for Claude 3.7 Sonnet
+- Added convenience methods to enable beta features:
+  - `enable128kOutput()` - Enables 128k token output beta feature
+  - `enable128kOutputWithTokens()` - Enables 128k token output and sets max tokens
+- Added general beta feature management methods:
+  - `enableBetaFeature()` - Enable a specific beta feature
+  - `disableBetaFeature()` - Disable a specific beta feature
+  - `setBetaFeatures()` - Configure multiple beta features at once
+  - `isBetaFeatureEnabled()` - Check if a specific beta feature is enabled
+  - `getBetaFeatures()` - Get all configured beta features
