@@ -1,7 +1,7 @@
 {
   "name": "claude-php/claude-3-api",
   "version": "0.1.19",
-  "description": "A PHP package for the Claude 3.7 Sonnet API",
+  "description": "A PHP package for the Claude 3.5 Sonnet API",
   "type": "library",
   "require": {
     "php": "^8.0",
@@ -27,8 +27,5 @@
       "name": "Dale Hurley",
       "email": "dale@createmy.com.au"
     }
-  ],
-  "scripts": {
-    "test": "vendor/bin/phpunit tests"
-  }
+  ]
 }
