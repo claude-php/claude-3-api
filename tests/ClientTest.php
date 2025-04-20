@@ -231,4 +231,24 @@ class ClientTest extends TestCase
         // Verify max tokens is set correctly
         $this->assertEquals($customTokens, $this->config->getMaxTokens());
     }
+
+    public function testMessageRequestWithRaw()
+    {
+        $messageRequest = new MessageRequest();
+        $messageRequest->addMessage(new Message('user', [new TextContent('Hello world!')]));
+
+        $messageRequest->setRaw([
+            'thinking' => [
+                'type' => 'enabled',
+                'budget_tokens' => 24000
+            ]
+        ]);
+
+        $requestArray = $messageRequest->toArray();
+
+        $this->assertArrayHasKey('thinking', $requestArray);
+        $this->assertCount(2, $requestArray['thinking']);
+        $this->assertEquals('enabled', $requestArray['thinking']['type']);
+    }
+
 }

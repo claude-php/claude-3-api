@@ -21,6 +21,7 @@ class MessageRequest
     private ?array $metadata = null;
     private ?int $topK = null;
     private ?float $topP = null;
+    private ?array $raw = [];
 
     public function __construct(Config $config = null)
     {
@@ -141,6 +142,12 @@ class MessageRequest
         return $this;
     }
 
+    public function setRaw(?array $raw): self
+    {
+        $this->raw = $raw;
+        return $this;
+    }
+
     public function toArray(): array
     {
         if (empty($this->messages)) {
@@ -152,6 +159,10 @@ class MessageRequest
             'max_tokens' => $this->maxTokens,
             'messages' => $this->messages,
         ];
+
+        if (!empty($this->raw)) {
+            $data = array_merge($data, $this->raw);
+        }
 
         if (!empty($this->system)) {
             $data['system'] = $this->system;
