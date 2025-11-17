@@ -1,6 +1,6 @@
 {
   "name": "claude-php/claude-3-api",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "[DEPRECATED] Use claude-php/claude-php-sdk instead. This package is no longer maintained.",
   "type": "library",
   "abandoned": "claude-php/claude-php-sdk",
