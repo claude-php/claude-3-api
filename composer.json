@@ -1,8 +1,9 @@
 {
   "name": "claude-php/claude-3-api",
   "version": "0.1.23",
-  "description": "A PHP package for the Claude 3.7 Sonnet API",
+  "description": "[DEPRECATED] Use claude-php/claude-php-sdk instead. This package is no longer maintained.",
   "type": "library",
+  "abandoned": "claude-php/claude-php-sdk",
   "require": {
     "php": "^8.0",
     "guzzlehttp/guzzle": "^7.8",

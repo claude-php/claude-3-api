@@ -1,5 +1,28 @@
 # Claude 3 API PHP Package
 
+> **⚠️ DEPRECATION NOTICE**
+>
+> **This package is deprecated and no longer maintained.**
+>
+> Please migrate to the newer [Claude PHP SDK](https://github.com/claude-php/Claude-PHP-SDK), which provides:
+>
+> - **Like-for-like parity** with the official [Claude Python SDK](https://github.com/anthropics/anthropic-sdk-python)
+> - Full support for all Claude API features including:
+>   - Messages API with streaming
+>   - Tool use and function calling
+>   - Prompt caching
+>   - Vision capabilities
+>   - Batch processing (50% cost savings)
+>   - Beta features (extended output, structured outputs, thinking mode)
+>   - Token counting
+> - Comprehensive documentation and examples
+> - Active maintenance and updates
+> - Framework integration guides (Laravel, Symfony)
+>
+> **Migration Guide:** Visit the [Claude PHP SDK repository](https://github.com/claude-php/Claude-PHP-SDK) for installation instructions and documentation.
+>
+> ---
+
 A robust PHP package for interacting with Anthropic's Claude 3 API, supporting both text and vision capabilities.
 
 ## Features
